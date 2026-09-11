@@ -1,0 +1,6 @@
+.rocketride/
+.env
+
+# Dependencies and build output (machine-generated)
+**/node_modules/
+**/dist/
