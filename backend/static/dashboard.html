@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Agent</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f1419;
+      --panel: #1a2332;
+      --border: #2d3a4f;
+      --text: #e7edf5;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --success: #22c55e;
+      --error: #ef4444;
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #0b1020 0%, #121826 40%, #0f1419 100%);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    header { margin-bottom: 2rem; }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.75rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    }
+    .section-title {
+      margin: 0 0 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .section + .section { margin-top: 1.75rem; }
+    label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .hint {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1724;
+      color: var(--text);
+      font: inherit;
+    }
+    input:focus, textarea:focus {
+      outline: 2px solid rgba(59, 130, 246, 0.45);
+      border-color: var(--accent);
+    }
+    textarea { min-height: 88px; resize: vertical; }
+    .field { margin-bottom: 1rem; }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 560px) {
+      .row { grid-template-columns: 1fr; }
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.2rem;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+    button:hover { background: var(--accent-hover); }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    #status {
+      font-size: 0.875rem;
+      min-height: 1.25rem;
+    }
+    #status.ok { color: var(--success); }
+    #status.err { color: var(--error); }
+    .links {
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+    }
+    .links a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .links a:hover { text-decoration: underline; }
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .toggle input { width: auto; }
+    #run-status { font-size: 0.875rem; }
+    #run-status.ok { color: var(--success); }
+    #run-status.err { color: var(--error); }
+    #run-output {
+      margin: 1rem 0 0;
+      padding: 0.85rem 1rem;
+      background: #0f1724;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .muted-block {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .muted-block table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text);
+    }
+    .muted-block th, .muted-block td {
+      text-align: left;
+      padding: 0.4rem 0.5rem 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+      font-weight: 400;
+    }
+    .muted-block th {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      margin-right: 0.3rem;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Finance Agent</h1>
+      <p class="sub">Connect your Google Sheet, set one savings goal, and save your setup locally. Telegram credentials live in <code>.env</code>.</p>
+    </header>
+
+    <div class="panel">
+      <form id="config-form">
+        <div class="section">
+          <h2 class="section-title">Google Sheet</h2>
+          <div class="field">
+            <label for="sheet_url">Sheet link</label>
+            <input id="sheet_url" name="sheet_url" type="url" required
+              placeholder="https://docs.google.com/spreadsheets/d/..." />
+            <span class="hint">Public sheet with <code>transactions</code> and <code>budgets</code> tabs.</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">Savings goal</h2>
+          <p class="hint" style="margin-top: -0.5rem; margin-bottom: 1rem;">One active goal at a time. Saving replaces the previous goal.</p>
+          <div class="field">
+            <label for="goal">Goal</label>
+            <textarea id="goal" name="goal" required
+              placeholder="Save $10K for a Japan trip in 2 months"></textarea>
+            <span class="hint">Describe what you are working toward.</span>
+          </div>
+          <div class="field">
+            <label for="target_amount">Target amount ($)</label>
+            <input id="target_amount" name="target_amount" type="number" min="0.01" step="0.01" required
+              placeholder="60000" />
+            <span class="hint">Minimum bank balance when the goal is complete. Example: saving $10K on top of a $50K cushion means $60,000 here.</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="save-btn">Save configuration</button>
+          <span id="status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
+
+      <p class="links">
+        <a href="/docs">API docs</a>
+        ·
+        <a href="/health">Health check</a>
+      </p>
+    </div>
+
+    <div class="panel" style="margin-top: 1.5rem;">
+      <div class="section">
+        <h2 class="section-title">Agent run</h2>
+        <p class="hint" style="margin-top: -0.5rem;">
+          Each run reloads the sheet, checks spending against your goal, and sends a
+          Telegram message only when there is something to say.
+        </p>
+        <div class="actions">
+          <button type="button" id="run-btn">Run now</button>
+          <label class="toggle" for="autorun">
+            <input id="autorun" type="checkbox" />
+            Auto-run every 2 minutes
+          </label>
+          <span id="run-status" role="status" aria-live="polite"></span>
+        </div>
+        <pre id="run-output" hidden></pre>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Memory</h2>
+        <div id="memory" class="muted-block">Loading…</div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Run log</h2>
+        <div id="run-log" class="muted-block">No runs yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("config-form");
+    const statusEl = document.getElementById("status");
+    const saveBtn = document.getElementById("save-btn");
+
+    function setStatus(message, kind) {
+      statusEl.textContent = message;
+      statusEl.className = kind || "";
+    }
+
+    async function loadConfig() {
+      try {
+        const res = await fetch("/api/config");
+        if (res.status === 404) return;
+        if (!res.ok) throw new Error("Could not load saved configuration.");
+        const data = await res.json();
+
+        sheet_url.value = data.sheet_url || "";
+        goal.value = data.goal?.goal || "";
+        target_amount.value = data.goal?.target_amount ?? "";
+      } catch (err) {
+        setStatus(err.message, "err");
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setStatus("");
+      saveBtn.disabled = true;
+
+      const payload = {
+        sheet_url: sheet_url.value.trim(),
+        goal: goal.value.trim(),
+        target_amount: Number(target_amount.value),
+      };
+
+      try {
+        const res = await fetch("/api/config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const detail = data.detail;
+          const message = Array.isArray(detail)
+            ? detail.map((item) => item.msg || item).join("; ")
+            : (detail || "Save failed.");
+          throw new Error(message);
+        }
+
+        setStatus("Configuration saved locally.", "ok");
+      } catch (err) {
+        setStatus(err.message, "err");
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    const runBtn = document.getElementById("run-btn");
+    const runStatusEl = document.getElementById("run-status");
+    const runOutputEl = document.getElementById("run-output");
+    const autorunEl = document.getElementById("autorun");
+    const memoryEl = document.getElementById("memory");
+    const runLogEl = document.getElementById("run-log");
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      })[ch]);
+    }
+
+    function setRunStatus(message, kind) {
+      runStatusEl.textContent = message;
+      runStatusEl.className = kind || "";
+    }
+
+    async function detail(res) {
+      const data = await res.json().catch(() => ({}));
+      return data.detail || `Request failed with ${res.status}.`;
+    }
+
+    function renderMemory(memory) {
+      const goal = (memory.goals || [])[0];
+      const preferences = memory.preferences || [];
+
+      let html = goal
+        ? `<p style="margin:0 0 .75rem"><strong>${escapeHtml(goal.goal)}</strong><br />
+             Target bank balance $${Number(goal.target_amount || 0).toLocaleString()}
+             <span class="tag">${escapeHtml(goal.source || "config")}</span></p>`
+        : `<p style="margin:0 0 .75rem">No goal saved yet.</p>`;
+
+      html += preferences.length
+        ? `<p style="margin:0">Learned preferences:<br />` +
+          preferences
+            .map((p) => `<span class="tag">${escapeHtml(p.kind)}: ${escapeHtml(p.target)}</span>`)
+            .join("") +
+          `</p>`
+        : `<p style="margin:0">No preferences learned yet. Reply to a Telegram nudge to teach it one.</p>`;
+
+      memoryEl.innerHTML = html;
+    }
+
+    function renderRunLog(runs) {
+      if (!runs || !runs.length) {
+        runLogEl.textContent = "No runs yet.";
+        return;
+      }
+      runLogEl.innerHTML =
+        `<table><thead><tr><th>Time</th><th>Mode</th><th>New rows</th><th>Flags</th><th>Sent</th></tr></thead><tbody>` +
+        runs
+          .map(
+            (run) => `<tr>
+              <td>${escapeHtml((run.time || "").replace("T", " ").replace("+00:00", ""))}</td>
+              <td>${escapeHtml(run.mode)}</td>
+              <td>${escapeHtml(run.new_rows ?? 0)}</td>
+              <td>${(run.flags || []).map((f) => `<span class="tag">${escapeHtml(f)}</span>`).join("") || "—"}</td>
+              <td>${run.sent ? "yes" : "no"}</td>
+            </tr>`
+          )
+          .join("") +
+        `</tbody></table>`;
+    }
+
+    async function loadState() {
+      try {
+        const res = await fetch("/api/state");
+        if (!res.ok) throw new Error(await detail(res));
+        const data = await res.json();
+        renderMemory(data.memory || {});
+        renderRunLog(data.runs);
+        autorunEl.checked = Boolean(data.autorun);
+      } catch (err) {
+        memoryEl.textContent = err.message;
+      }
+    }
+
+    runBtn.addEventListener("click", async () => {
+      runBtn.disabled = true;
+      runOutputEl.hidden = true;
+      setRunStatus("Running… this takes up to a minute.", "");
+
+      try {
+        const res = await fetch("/api/run", { method: "POST" });
+        if (!res.ok) throw new Error(await detail(res));
+        const data = await res.json();
+
+        setRunStatus(`Done — mode: ${data.mode}`, "ok");
+        runOutputEl.hidden = false;
+        runOutputEl.textContent = data.message
+          ? data.message
+          : `No message sent (${data.new_rows} new rows, mode ${data.mode}).`;
+        await loadState();
+      } catch (err) {
+        setRunStatus(err.message, "err");
+      } finally {
+        runBtn.disabled = false;
+      }
+    });
+
+    autorunEl.addEventListener("change", async () => {
+      try {
+        const res = await fetch("/api/autorun", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ enabled: autorunEl.checked }),
+        });
+        if (!res.ok) throw new Error(await detail(res));
+        setRunStatus(autorunEl.checked ? "Auto-run on." : "Auto-run off.", "ok");
+      } catch (err) {
+        autorunEl.checked = !autorunEl.checked;
+        setRunStatus(err.message, "err");
+      }
+    });
+
+    loadConfig();
+    loadState();
+  </script>
+</body>
+</html>

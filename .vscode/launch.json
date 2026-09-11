@@ -5,8 +5,8 @@
       "name": "Debug Finance Agent",
       "type": "msedge",
       "request": "launch",
-      "url": "https://api.rocketride.ai:443/?appid=local.finance_agent&rrdev=1",
-      "webRoot": "${workspaceFolder}/apps/finance_agent-ui",
+      "url": "http://localhost:8000/docs",
+      "webRoot": "${workspaceFolder}/backend",
       "sourceMapPathOverrides": {
         "webpack:///./*": "${workspaceFolder}/apps/finance_agent-ui/*",
         "webpack:///*": "*"

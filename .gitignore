@@ -1,5 +1,26 @@
-.rocketride/
 .env
+config.json
+run_state.json
+.telegram_poller
+google-service-account.json
+*-service-account*.json
+.venv/
+__pycache__/
+*.pyc
+.python-version
+
+# Local DuckDB stand-in used only when hotdata has no key yet
+*.duckdb
+*.duckdb.wal
+
+# Local tool caches and editor state
+.rocketride/
+.claude/
+.cursor/
+.DS_Store
+**/.cognee_system/
+**/.data_storage/
+**/.cognee_cache/
 
 # Dependencies and build output (machine-generated)
 **/node_modules/

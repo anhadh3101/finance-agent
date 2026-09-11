@@ -1,0 +1,31 @@
+date,merchant,amount,category
+2026-08-01,Trader Joe's,54.2,groceries
+2026-08-02,Uber,18.4,transport
+2026-08-03,DoorDash,21.5,food_delivery
+2026-08-04,Planet Fitness,25,gym
+2026-08-05,DoorDash,18.75,food_delivery
+2026-08-07,Netflix,15.49,subscriptions
+2026-08-08,Safeway,62.1,groceries
+2026-08-09,Uber,12.8,transport
+2026-08-10,Uber Eats,24.6,food_delivery
+2026-08-11,Chipotle,14.25,dining
+2026-08-13,DoorDash,30.4,food_delivery
+2026-08-15,Whole Foods,71.8,groceries
+2026-08-16,Uber,16.9,transport
+2026-08-17,Uber Eats,28.15,food_delivery
+2026-08-18,Sweetgreen,16.4,dining
+2026-08-20,DoorDash,41.85,food_delivery
+2026-08-22,Trader Joe's,48.3,groceries
+2026-08-23,Uber,14.2,transport
+2026-08-24,DoorDash,32.1,food_delivery
+2026-08-25,Uber Eats,27.45,food_delivery
+2026-08-26,Costco,300,groceries
+2026-08-27,DoorDash,30.45,food_delivery
+2026-08-29,Safeway,58.9,groceries
+2026-09-01,Planet Fitness,25,gym
+2026-09-02,Netflix,15.49,subscriptions
+2026-09-03,Uber,19.1,transport
+2026-09-04,Chipotle,13.8,dining
+2026-09-05,Trader Joe's,51.4,groceries
+2026-09-06,Uber,11.75,transport
+2026-09-07,Whole Foods,64.2,groceries
